@@ -3,7 +3,15 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh 'terraform --version'
+                script {
+                    // Build the Docker image
+                    docker.build("my-terraform-image")
+
+                    // Run the Docker container
+                    docker.image("my-terraform-image").inside {
+                        sh 'terraform --version'
+                    }
+                }
             }
         }
     }
